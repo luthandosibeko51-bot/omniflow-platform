@@ -6,9 +6,10 @@ import {
   Eye, 
   CheckCircle, 
   TrendingUp,
-  MoreVertical,
   Building2
 } from 'lucide-react';
+import ExportButton from '@/components/ExportButton';
+import ProspectActions from '@/components/ProspectActions';
 
 export const dynamic = 'force-dynamic';
 
@@ -56,11 +57,15 @@ export default async function DashboardPage() {
 
       {/* Main Table */}
       <div className="glass-card rounded-2xl border border-white/5 bg-neutral-900/50 overflow-hidden">
-        <div className="p-6 border-b border-white/5 flex items-center justify-between">
+        <div className="p-6 border-b border-[var(--color-border)] flex items-center justify-between">
           <h2 className="text-xl font-semibold text-white">Prospect Pipeline</h2>
-          <button className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition">
-            Export CSV
-          </button>
+          <ExportButton businesses={businesses.map(b => ({
+            id: b.id,
+            name: b.name,
+            industry: b.industry,
+            status: b.status,
+            createdAt: b.createdAt
+          }))} />
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-left">
@@ -108,9 +113,7 @@ export default async function DashboardPage() {
                     {new Date(biz.createdAt).toLocaleDateString()}
                   </td>
                   <td className="px-6 py-4 text-right">
-                    <button className="p-1 hover:bg-white/5 rounded text-neutral-500 transition">
-                      <MoreVertical className="w-4 h-4" />
-                    </button>
+                    <ProspectActions businessId={biz.id} status={biz.status} />
                   </td>
                 </tr>
               )) : (
