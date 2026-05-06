@@ -56,19 +56,21 @@ export default function ContactPage() {
     // Simulate API call — In production, this POST to /api/leads
     await new Promise((resolve) => setTimeout(resolve, 1500));
 
-    // Track conversion event
+    // Track conversion event & save lead
     try {
-      await fetch('/api/track', {
+      const response = await fetch('/api/track', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           businessId: 'contact-form',
           eventType: 'form_submitted',
-          metadata: { businessName: formData.businessName },
+          metadata: { ...formData },
         }),
       });
-    } catch {
-      // Non-blocking
+      
+      if (!response.ok) throw new Error('Failed to save lead');
+    } catch (err) {
+      console.error("Failed to track conversion", err);
     }
 
     setIsSubmitting(false);

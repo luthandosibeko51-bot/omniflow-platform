@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { PrismaClient } from '@prisma/client';
 
-// In production, this will use the @omniflow/database Prisma client.
-// For now, we log the event and return a success response.
+const prisma = new PrismaClient();
 
 interface TrackEvent {
   businessId: string;
   eventType: 'demo_link_clicked' | 'demo_scrolled' | 'claim_button_hovered' | 'form_submitted' | 'demo_viewed';
-  metadata?: Record<string, unknown>;
+  metadata?: any;
 }
 
 export async function POST(request: NextRequest) {
@@ -15,32 +15,61 @@ export async function POST(request: NextRequest) {
 
     if (!body.businessId || !body.eventType) {
       return NextResponse.json(
-        { error: 'Missing required fields: businessId, eventType' },
+        { error: 'Missing required fields' },
         { status: 400 }
       );
     }
 
-    // TODO: Replace with Prisma client in Phase 6
-    // await prisma.campaignEvent.create({
-    //   data: {
-    //     businessId: body.businessId,
-    //     eventType: body.eventType,
-    //   },
-    // });
+    // 1. Handle Lead Capture (from Contact Form)
+    if (body.eventType === 'form_submitted' && body.metadata) {
+      const { firstName, lastName, email, phone, businessName, industry } = body.metadata;
+      
+      // Create a new business and lead
+      const business = await prisma.business.create({
+        data: {
+          name: businessName,
+          industry: industry,
+          status: 'PENDING_OUTREACH',
+          leads: {
+            create: {
+              firstName,
+              lastName,
+              email,
+              phone,
+            }
+          },
+          events: {
+            create: {
+              eventType: 'form_submitted'
+            }
+          }
+        }
+      });
 
-    // TODO: If eventType is 'demo_viewed', update Business status
-    // await prisma.business.update({
-    //   where: { id: body.businessId },
-    //   data: { status: 'DEMO_VIEWED' },
-    // });
+      return NextResponse.json({ success: true, businessId: business.id });
+    }
 
-    console.log(`[TRACK] ${body.eventType} for business ${body.businessId}`);
+    // 2. Handle generic tracking
+    await prisma.campaignEvent.create({
+      data: {
+        businessId: body.businessId === 'contact-form' ? undefined : body.businessId,
+        eventType: body.eventType,
+      },
+    });
 
-    return NextResponse.json({ success: true, event: body.eventType });
-  } catch (error) {
+    // 3. Update status if demo viewed
+    if (body.eventType === 'demo_viewed' && body.businessId !== 'contact-form') {
+      await prisma.business.update({
+        where: { id: body.businessId },
+        data: { status: 'DEMO_VIEWED' },
+      });
+    }
+
+    return NextResponse.json({ success: true });
+  } catch (error: any) {
     console.error('[TRACK] Error:', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Internal server error', details: error.message },
       { status: 500 }
     );
   }
