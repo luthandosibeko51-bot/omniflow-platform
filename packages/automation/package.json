@@ -1,0 +1,14 @@
+{
+  "name": "automation",
+  "version": "1.0.0",
+  "main": "src/outreach.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node src/outreach.js"
+  },
+  "dependencies": {
+    "openai": "^4.0.0",
+    "resend": "^3.0.0",
+    "@prisma/client": "^5.22.0"
+  }
+}
