@@ -1,6 +1,7 @@
 import React from 'react';
 import { notFound } from 'next/navigation';
 import { PrismaClient } from '@prisma/client';
+import ClaimButton from '@/components/ClaimButton';
 
 interface DemoPageProps {
   params: Promise<{
@@ -58,11 +59,9 @@ export default async function DemoPage({ params }: DemoPageProps) {
             {content?.hero?.subtitle || `Experience the future of your online presence with Omniflow's specialized solutions.`}
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
-            <button className="px-8 py-4 bg-white text-black font-bold rounded-full hover:scale-105 transition-transform">
-              {content?.hero?.cta || "Get Started"}
-            </button>
+            <ClaimButton businessId={businessId} />
             <button className="px-8 py-4 glass-card font-bold rounded-full border border-white/10 hover:bg-white/5 transition-colors">
-              Claim This Website
+              Book Consultation
             </button>
           </div>
         </div>
