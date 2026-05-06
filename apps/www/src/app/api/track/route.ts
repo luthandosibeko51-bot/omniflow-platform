@@ -24,7 +24,6 @@ export async function POST(request: NextRequest) {
     if (body.eventType === 'form_submitted' && body.metadata) {
       const { firstName, lastName, email, phone, businessName, industry } = body.metadata;
       
-      // Create a new business and lead
       const business = await prisma.business.create({
         data: {
           name: businessName,
@@ -49,20 +48,22 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: true, businessId: business.id });
     }
 
-    // 2. Handle generic tracking
-    await prisma.campaignEvent.create({
-      data: {
-        businessId: body.businessId === 'contact-form' ? undefined : body.businessId,
-        eventType: body.eventType,
-      },
-    });
-
-    // 3. Update status if demo viewed
-    if (body.eventType === 'demo_viewed' && body.businessId !== 'contact-form') {
-      await prisma.business.update({
-        where: { id: body.businessId },
-        data: { status: 'DEMO_VIEWED' },
+    // 2. Handle generic tracking for existing businesses
+    if (body.businessId !== 'contact-form') {
+      await prisma.campaignEvent.create({
+        data: {
+          businessId: body.businessId,
+          eventType: body.eventType,
+        },
       });
+
+      // Update status if demo viewed
+      if (body.eventType === 'demo_viewed') {
+        await prisma.business.update({
+          where: { id: body.businessId },
+          data: { status: 'DEMO_VIEWED' },
+        });
+      }
     }
 
     return NextResponse.json({ success: true });
