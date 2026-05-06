@@ -27,7 +27,7 @@ export default async function DashboardPage() {
     { name: 'Total Prospects', value: businesses.length, icon: Users, color: 'text-blue-500' },
     { name: 'Outreach Sent', value: businesses.filter((b: any)=> b.status !== 'PENDING_OUTREACH').length, icon: Send, color: 'text-indigo-500' },
     { name: 'Demos Viewed', value: businesses.filter((b: any) => b.status === 'DEMO_VIEWED').length, icon: Eye, color: 'text-emerald-500' },
-    { name: 'Conversions', value: businesses.filter((b: a any)=> b.status === 'CLAIMED').length, icon: CheckCircle, color: 'text-orange-500' },
+    { name: 'Conversions', value: businesses.filter((b: any)=> b.status === 'CLAIMED').length, icon: CheckCircle, color: 'text-orange-500' },
   ];
 
   return (
