@@ -1,11 +1,10 @@
 import React from 'react';
-import { PrismaClient } from '@prisma/client';
+import prisma from '@omniflow/database';
 import { Users, Mail, Phone, Calendar } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
 export default async function LeadsPage() {
-  const prisma = new PrismaClient();
   const businesses = await prisma.business.findMany({
     orderBy: { createdAt: 'desc' },
     include: {

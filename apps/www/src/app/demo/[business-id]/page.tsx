@@ -1,6 +1,6 @@
 import React from 'react';
 import { notFound } from 'next/navigation';
-import { PrismaClient } from '@prisma/client';
+import prisma from '@omniflow/database';
 import ClaimButton from '@/components/ClaimButton';
 
 interface DemoPageProps {
@@ -12,7 +12,6 @@ interface DemoPageProps {
 export const dynamic = 'force-dynamic';
 
 export default async function DemoPage({ params }: DemoPageProps) {
-  const prisma = new PrismaClient();
   const resolvedParams = await params;
   const businessId = resolvedParams['business-id'];
 

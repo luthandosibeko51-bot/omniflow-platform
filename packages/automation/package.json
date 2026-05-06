@@ -4,11 +4,13 @@
   "main": "src/outreach.js",
   "type": "module",
   "scripts": {
+    "outreach": "node src/outreach.js",
     "dev": "node src/outreach.js"
   },
   "dependencies": {
-    "openai": "^4.0.0",
+    "openai": "^4.104.0",
     "resend": "^3.0.0",
-    "@prisma/client": "^5.22.0"
+    "@prisma/client": "^5.22.0",
+    "@omniflow/database": "*"
   }
 }

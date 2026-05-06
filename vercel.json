@@ -1,0 +1,20 @@
+{
+  "buildCommand": "turbo run build",
+  "installCommand": "npm install",
+  "framework": "nextjs",
+  "ignoreCommand": "git diff --quiet HEAD^ HEAD .",
+  "projects": [
+    {
+      "name": "omniflow-www",
+      "rootDirectory": "apps/www"
+    },
+    {
+      "name": "omniflow-crm",
+      "rootDirectory": "apps/crm-dashboard"
+    },
+    {
+      "name": "omniflow-demo",
+      "rootDirectory": "apps/demo-service"
+    }
+  ]
+}

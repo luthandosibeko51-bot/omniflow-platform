@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
+import prisma from '@omniflow/database';
 import OpenAI from 'openai';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(req: NextRequest) {
-  const prisma = new PrismaClient();
   const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
   });

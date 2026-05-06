@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
+    "@omniflow/database": "*",
     "next": "16.2.5",
     "openai": "^4.104.0",
     "react": "19.2.4",

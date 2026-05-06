@@ -1,5 +1,5 @@
 import React from 'react';
-import { PrismaClient } from '@prisma/client';
+import prisma from '@omniflow/database';
 import { 
   Users, 
   Send, 
@@ -14,7 +14,6 @@ import ProspectActions from '@/components/ProspectActions';
 export const dynamic = 'force-dynamic';
 
 export default async function DashboardPage() {
-  const prisma = new PrismaClient();
   const businesses = await prisma.business.findMany({
     orderBy: { createdAt: 'desc' },
     include: {
@@ -41,7 +40,7 @@ export default async function DashboardPage() {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {stats.map((st: anyat) => (
+        {stats.map((stat: any) => (
           <div key={stat.name} className="glass-card p-6 rounded-2xl border border-white/5 bg-neutral-900/50">
             <div className="flex items-center justify-between mb-4">
               <div className={`p-2 rounded-lg bg-white/5 ${stat.color}`}>

@@ -1,11 +1,10 @@
 import React from 'react';
-import { PrismaClient } from '@prisma/client';
+import prisma from '@omniflow/database';
 import { BarChart3, Send, CheckCircle2, AlertCircle } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
 export default async function CampaignsPage() {
-  const prisma = new PrismaClient();
   const events = await prisma.campaignEvent.findMany({
     orderBy: { createdAt: 'desc' },
     include: {
