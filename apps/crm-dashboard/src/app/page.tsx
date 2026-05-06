@@ -40,7 +40,7 @@ export default async function DashboardPage() {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {stats.map((stat) => (
+        {stats.map((st: anyat) => (
           <div key={stat.name} className="glass-card p-6 rounded-2xl border border-white/5 bg-neutral-900/50">
             <div className="flex items-center justify-between mb-4">
               <div className={`p-2 rounded-lg bg-white/5 ${stat.color}`}>
