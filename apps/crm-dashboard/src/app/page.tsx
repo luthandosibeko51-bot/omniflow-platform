@@ -25,9 +25,9 @@ export default async function DashboardPage() {
 
   const stats = [
     { name: 'Total Prospects', value: businesses.length, icon: Users, color: 'text-blue-500' },
-    { name: 'Outreach Sent', value: businesses.filter((b: any)=> b.status !== 'PENDING_OUTREACH').length, icon: Send, color: 'text-indigo-500' },
-    { name: 'Demos Viewed', value: businesses.filter((b: any) => b.status === 'DEMO_VIEWED').length, icon: Eye, color: 'text-emerald-500' },
-    { name: 'Conversions', value: businesses.filter((b: any)=> b.status === 'CLAIMED').length, icon: CheckCircle, color: 'text-orange-500' },
+    { name: 'Outreach Sent', value: businesses.filter((b: any)=> b.status === 'OUTREACH_SENT').length, icon: Send, color: 'text-indigo-500' },
+    { name: 'Needs Outreach', value: businesses.filter((b: any) => b.status === 'PENDING_RESEARCH' && !b.hasWebsite).length, icon: Eye, color: 'text-emerald-500' },
+    { name: 'Replied', value: businesses.filter((b: any)=> b.status === 'REPLIED').length, icon: CheckCircle, color: 'text-orange-500' },
   ];
 
   return (
@@ -72,8 +72,8 @@ export default async function DashboardPage() {
               <tr className="text-neutral-500 text-sm border-b border-white/5">
                 <th className="px-6 py-4 font-medium">Business</th>
                 <th className="px-6 py-4 font-medium">Industry</th>
+                <th className="px-6 py-4 font-medium">Has Website</th>
                 <th className="px-6 py-4 font-medium">Status</th>
-                <th className="px-6 py-4 font-medium">Events</th>
                 <th className="px-6 py-4 font-medium">Added</th>
                 <th className="px-6 py-4"></th>
               </tr>
@@ -96,23 +96,27 @@ export default async function DashboardPage() {
                     {biz.industry}
                   </td>
                   <td className="px-6 py-4">
+                    {biz.hasWebsite ? (
+                       <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-500">Yes</span>
+                    ) : (
+                       <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-rose-500/10 text-rose-500">No</span>
+                    )}
+                  </td>
+                  <td className="px-6 py-4">
                     <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
-                      biz.status === 'CLAIMED' ? 'bg-emerald-500/10 text-emerald-500' :
-                      biz.status === 'DEMO_VIEWED' ? 'bg-blue-500/10 text-blue-500' :
-                      biz.status === 'CONTACTED' ? 'bg-indigo-500/10 text-indigo-400' :
+                      biz.status === 'REPLIED' ? 'bg-emerald-500/10 text-emerald-500' :
+                      biz.status === 'OUTREACH_SENT' ? 'bg-blue-500/10 text-blue-500' :
+                      biz.status === 'PENDING_RESEARCH' ? 'bg-indigo-500/10 text-indigo-400' :
                       'bg-neutral-500/10 text-neutral-500'
                     }`}>
                       {biz.status.replace('_', ' ')}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-sm text-neutral-400">
-                    {biz._count.events} events
-                  </td>
                   <td className="px-6 py-4 text-sm text-neutral-500">
                     {new Date(biz.createdAt).toLocaleDateString()}
                   </td>
                   <td className="px-6 py-4 text-right">
-                    <ProspectActions businessId={biz.id} status={biz.status} />
+                    <ProspectActions businessId={biz.id} status={biz.status} hasWebsite={biz.hasWebsite} />
                   </td>
                 </tr>
               )) : (

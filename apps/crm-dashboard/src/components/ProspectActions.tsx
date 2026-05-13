@@ -1,14 +1,15 @@
 'use client';
 
 import React from 'react';
-import { MoreVertical, ExternalLink, Mail, Trash2 } from 'lucide-react';
+import { MoreVertical, ExternalLink, MessageCircle, Trash2 } from 'lucide-react';
 
 interface ProspectActionsProps {
   businessId: string;
   status: string;
+  hasWebsite?: boolean;
 }
 
-export default function ProspectActions({ businessId, status }: ProspectActionsProps) {
+export default function ProspectActions({ businessId, status, hasWebsite }: ProspectActionsProps) {
   const [isOpen, setIsOpen] = React.useState(false);
 
   // Close dropdown when clicking outside
@@ -37,25 +38,13 @@ export default function ProspectActions({ businessId, status }: ProspectActionsP
       {isOpen && (
         <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg glass-card border border-[var(--color-border)] z-50 overflow-hidden">
           <div className="py-1">
-            <a 
-              href={`https://omniflow-marketing.vercel.app/demo/${businessId}`} 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 px-4 py-2 text-sm text-[var(--color-text-primary)] hover:bg-[var(--color-surface-overlay)] transition"
+            <button 
+              className="flex w-full items-center gap-2 px-4 py-2 text-sm text-[var(--color-text-primary)] hover:bg-[var(--color-surface-overlay)] transition"
+              onClick={() => alert('Log social media outreach for ' + businessId)}
             >
-              <ExternalLink className="w-4 h-4 text-indigo-400" />
-              View Demo Site
-            </a>
-            
-            {status === 'PENDING_OUTREACH' && (
-              <button 
-                className="flex w-full items-center gap-2 px-4 py-2 text-sm text-[var(--color-text-primary)] hover:bg-[var(--color-surface-overlay)] transition"
-                onClick={() => alert('Manual outreach will be sent!')}
-              >
-                <Mail className="w-4 h-4 text-cyan-400" />
-                Send Outreach
-              </button>
-            )}
+              <MessageCircle className="w-4 h-4 text-cyan-400" />
+              Log Social Outreach
+            </button>
 
             <div className="border-t border-[var(--color-border)] my-1"></div>
             
